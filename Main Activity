@@ -1,0 +1,99 @@
+import android.app.ActionBar;
+import android.app.FragmentTransaction;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
+
+public class MainActivity extends FragmentActivity {
+
+	ViewPager Tab;
+    TabAdapter TabAdapter;
+    ActionBar actionBar;
+    
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+
+		TabAdapter = new TabAdapter(getSupportFragmentManager());
+		 
+        Tab = (ViewPager)findViewById(R.id.pager);
+        Tab.setOnPageChangeListener(
+                new ViewPager.SimpleOnPageChangeListener() {
+                    @Override
+                    public void onPageSelected(int position) {
+ 
+                        actionBar = getActionBar();
+                        actionBar.setSelectedNavigationItem(position);      
+                        }
+                });
+        Tab.setAdapter(TabAdapter);
+        
+        actionBar = getActionBar();
+        //Enable Tabs on Action Bar
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        ActionBar.TabListener tabListener = new ActionBar.TabListener(){
+ 
+            @Override
+            public void onTabReselected(android.app.ActionBar.Tab tab,
+                    FragmentTransaction ft) {
+                
+ 
+            }
+            @Override
+            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+
+               Tab.setCurrentItem(tab.getPosition());
+           }
+
+           @Override
+           public void onTabUnselected(android.app.ActionBar.Tab tab,
+                   FragmentTransaction ft) {
+               
+
+           }};
+           //Add New Tab and tab title
+           actionBar.addTab(actionBar.newTab().setText("Tab 1").setTabListener(tabListener));
+           actionBar.addTab(actionBar.newTab().setText("Tab 2").setTabListener(tabListener));
+           actionBar.addTab(actionBar.newTab().setText("Tab 3").setTabListener(tabListener));
+           actionBar.addTab(actionBar.newTab().setText("Tab 4").setTabListener(tabListener));
+          
+   }
+
+
+	public class TabAdapter extends FragmentStatePagerAdapter{
+
+		public TabAdapter(FragmentManager fm) {
+			super(fm);
+		}
+
+		@Override
+	    public Fragment getItem(int i) {
+	        switch (i) {
+	        case 0:
+	            //Fragment for Tab 1
+	            return new Tab1Activity();
+	        case 1:
+	           //Fragment for Tab 2
+	            return new Tab2Activity(); 
+	              case 2:
+	            //Fragment for Tab 3
+	            return new Tab3Activity();
+	        case 3:
+	            //Fragment for Tab 4
+	            return new Tab4Activity();
+	        }
+	        return null;
+	 
+	    }
+	 
+		//No. of Tabs
+	    @Override
+	    public int getCount() {
+	        return 4; 
+	    }
+	}
+}
